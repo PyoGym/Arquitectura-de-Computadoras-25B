@@ -1,7 +1,3 @@
-Este es el archivo `README.md` completo para tu repositorio de GitHub, generado con el formato estándar profesional.
-
------
-
 # Simulador de Pipeline MIPS 32-bit (5 Etapas)
 
 ## Universidad de Guadalajara - Centro Universitario de Ciencias Exactas e Ingenierías
