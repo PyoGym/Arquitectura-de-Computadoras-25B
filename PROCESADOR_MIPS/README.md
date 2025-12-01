@@ -82,8 +82,6 @@ El repositorio está organizado de la siguiente manera:
 └── PROCESADOR_TB.v                     # Testbench principal para simulación en Verilog
 ```
 
-*(Nota: Se sugiere agrupar los archivos .v en carpetas lógicas dentro de `src/` para facilitar la navegación).*
-
 -----
 
 ## Uso y Simulación
@@ -106,7 +104,7 @@ El repositorio está organizado de la siguiente manera:
 
 ### 2\. Simulación (Verilog)
 
-El proyecto está diseñado para ser simulado utilizando herramientas estándar de Verilog como **ModelSim**, **Icarus Verilog (iverilog)** o **Vivado**.
+El proyecto fue diseñado para ser simulado unicamente en **ModelSim**, y no fue probado en ningun otra herramienta estándar de Verilog como **Icarus Verilog (iverilog)** o **Vivado**.
 
 1.  **Compilación:** Compila todos los módulos `.v` junto con el *Testbench* (`PROCESADOR_TB.v`).
 
