@@ -102,27 +102,18 @@ El repositorio está organizado de la siguiente manera:
 
       * **IMPORTANTE:** Los archivos `instrucciones.txt` y `datos.txt` deben estar en el mismo directorio que el Testbench o en la ruta especificada por los módulos de memoria Verilog.
 
-### 2\. Simulación (Verilog)
+### 2. Simulación en ModelSim
+El proyecto está optimizado para la simulación con **ModelSim (Mentor Graphics/Siemens EDA)**.
 
-El proyecto fue diseñado para ser simulado unicamente en **ModelSim**, y no fue probado en ningun otra herramienta estándar de Verilog como **Icarus Verilog (iverilog)** o **Vivado**.
+**Creación del Proyecto:** Crea un nuevo proyecto en ModelSim e importa todos los archivos Verilog (.v).
 
-1.  **Compilación:** Compila todos los módulos `.v` junto con el *Testbench* (`PROCESADOR_TB.v`).
+**Compilación:** Compila todos los módulos.
 
-    *Ejemplo con iverilog:*
+**Simulación:** Inicia la simulación haciendo referencia al módulo procesador_tb.
 
-    ```bash
-    iverilog -o procesador PROCESADOR_TB.v src/**/*.v
-    ```
+**Visualización de Señales:** Una vez iniciada la simulación, añade las señales clave (PC, registros del Banco de Registros, datos de entrada/salida de los buffers del pipeline) a la ventana **Wave (Waveform Viewer)** para el análisis.
 
-2.  **Ejecución:** Ejecuta el archivo compilado para generar el archivo *Value Change Dump* (`.vcd`).
-
-    *Ejemplo con vvp:*
-
-    ```bash
-    vvp procesador
-    ```
-
-3.  **Visualización:** Abre el archivo `procesador.vcd` con un visualizador de *waveforms* (como **GTKWave**) para analizar el comportamiento del *datapath* en cada una de las 5 etapas, verificando los valores en el Banco de Registros y la Memoria de Datos.
+**Análisis:** Ejecuta la simulación por pasos (run -all o run X ns) y utiliza el waveform para verificar la propagación de instrucciones a través de las 5 etapas del pipeline.
 
 -----
 
