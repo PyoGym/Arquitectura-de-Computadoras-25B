@@ -10,7 +10,7 @@
 
 Este proyecto consiste en la implementación completa de un **Procesador MIPS de 32 bits** con arquitectura **Pipeline de 5 etapas (IF, ID, EX, MEM, WB)**, desarrollado en lenguaje **Verilog HDL**.
 
-El proyecto se complementa con una **Herramienta Decodificadora** con interfaz gráfica (**GUI**) desarrollada en **Python**. Esta herramienta es fundamental, ya que permite a los usuarios traducir código ensamblador MIPS a su representación binaria, formateada en **Big Endian**, para la precarga de la Memoria de Instrucciones y la Memoria de Datos del procesador.
+El proyecto se complementa con una **Herramienta Decodificadora** con interfaz gráfica (**GUI**) desarrollada en **Python**. Esta herramienta es fundamental, ya que permite a los usuarios traducir código ensamblador MIPS a su representación binaria, formateada en **Big Endian**, para la **precarga exclusiva de la Memoria de Instrucciones** del procesador.
 
 El objetivo principal es demostrar la funcionalidad de un *datapath* segmentado, incluyendo la lógica de control, unidades funcionales y registros de pipeline.
 
@@ -22,7 +22,7 @@ El objetivo principal es demostrar la funcionalidad de un *datapath* segmentado,
 
   * **5 Etapas Clásicas:** `Instruction Fetch (IF)`, `Instruction Decode (ID)`, `Execute (EX)`, `Memory (MEM)`, `Write Back (WB)`.
   * **Componentes Modulares:** Incluye módulos separados para todas las unidades funcionales: PC, ALU, Control Unit, Banco de Registros (BR), Memorias y *Buffers* de Pipeline.
-  * **Memoria Precargada:** La Memoria de Instrucciones y la Memoria de Datos se precargan con archivos de texto (`instrucciones.txt` y `datos.txt`) generados por el decodificador Python.
+  * **Memoria de Instrucciones Precargada:** El Decodificador genera el archivo `instrucciones.txt` necesario. **La Memoria de Datos (`datos.txt`) se carga manualmente** por el usuario según el programa de prueba.
   * **Diseño Síncrono:** La lógica del procesador está sincronizada con una señal de reloj (`clk`).
 
 ### 2\. Conjunto de Instrucciones Soportadas
@@ -39,12 +39,12 @@ El diseño es compatible con una selección de instrucciones comunes en la arqui
 ### 3\. Decodificador Gráfico (Python GUI)
 
   * **Ensamblador a Binario:** Transforma instrucciones MIPS en formato de 32 bits binario.
-  * **Formato Big Endian:** Genera el binario en formato Big Endian (byte más significativo primero), tal como lo requiere el módulo `MemInstrucciones_Procesador.v` para su inicialización.
-  * **Generación de Archivos:** Produce los archivos `.txt` (`instrucciones.txt` y `datos.txt`) listos para ser utilizados por el simulador Verilog.
+  * **Formato Big Endian:** Genera el binario en formato Big Endian (byte más significativo primero).
+  * **Generación de Archivos:** Produce el archivo `instrucciones.txt` listo para ser utilizado por el simulador Verilog.
 
 -----
 
-## 🛠 Estructura de Archivos
+## Estructura de Archivos
 
 El repositorio está organizado de la siguiente manera:
 
@@ -55,7 +55,7 @@ El repositorio está organizado de la siguiente manera:
 │   │   ├── PROCESADOR.v                # Módulo Top-Level (Datapath principal)
 │   ├── control_unit/
 │   │   ├── Control_Procesador.v        # Unidad de Control principal
-│   │   ├── ALU_Control_Procesador.v    # Lógica de control de la ALU
+│   │   └── ALU_Control_Procesador.v    # Lógica de control de la ALU
 │   ├── functional_units/
 │   │   ├── ALU_Procesador.v            # Unidad Aritmético Lógica (ALU)
 │   │   ├── ADD.v, AND.v                # Módulos aritméticos/lógicos auxiliares
@@ -82,7 +82,7 @@ El repositorio está organizado de la siguiente manera:
 └── PROCESADOR_TB.v                     # Testbench principal para simulación en Verilog
 ```
 
-*(Nota: Se asume que los archivos .v se agruparán en carpetas lógicas dentro de una carpeta `src/` para mantener el orden).*
+*(Nota: Se sugiere agrupar los archivos .v en carpetas lógicas dentro de `src/` para facilitar la navegación).*
 
 -----
 
@@ -91,12 +91,18 @@ El repositorio está organizado de la siguiente manera:
 ### 1\. Preparación de Instrucciones (Python)
 
 1.  Ejecuta la herramienta decodificadora:
+
     ```bash
     python decoder/GUI_Decodificador.py
     ```
+
 2.  Utiliza la GUI para cargar un archivo `.asm` (como `test_files/Ensamblador_Test.asm`) o ingresa el código ensamblador directamente.
-3.  Presiona **"Convertir"** y luego **"Guardar Resultado"** para generar los archivos `instrucciones.txt` y `datos.txt` necesarios en el formato Big Endian.
-      * **IMPORTANTE:** Asegúrate de que los archivos `instrucciones.txt` y `datos.txt` estén en el mismo directorio de tu simulación Verilog, o que los módulos `MemInstrucciones_Procesador.v` y `ram_sync_Procesador.v` tengan la ruta correcta hacia ellos.
+
+3.  Presiona **"Convertir"** y luego **"Guardar Resultado"** para generar el archivo **`instrucciones.txt`**.
+
+4.  **Asegúrate de tener un archivo `datos.txt`** con el formato binario de 32 bits para la precarga de la Memoria de Datos (esto depende del algoritmo de prueba).
+
+      * **IMPORTANTE:** Los archivos `instrucciones.txt` y `datos.txt` deben estar en el mismo directorio que el Testbench o en la ruta especificada por los módulos de memoria Verilog.
 
 ### 2\. Simulación (Verilog)
 
