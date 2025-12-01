@@ -22,7 +22,7 @@ El objetivo principal es demostrar la funcionalidad de un *datapath* segmentado,
 
   * **5 Etapas Clásicas:** `Instruction Fetch (IF)`, `Instruction Decode (ID)`, `Execute (EX)`, `Memory (MEM)`, `Write Back (WB)`.
   * **Componentes Modulares:** Incluye módulos separados para todas las unidades funcionales: PC, ALU, Control Unit, Banco de Registros (BR), Memorias y *Buffers* de Pipeline.
-  * **Memoria de Instrucciones Precargada:** El Decodificador genera el archivo `instrucciones.txt` necesario. **La Memoria de Datos (`datos.txt`) se carga manualmente** por el usuario según el programa de prueba.
+  * **Memoria de Instrucciones Precargada:** El Decodificador genera el archivo `instrucciones.txt`. **La Memoria de Datos (`datos.txt`) se carga manualmente** por el usuario para la simulación de pruebas.
   * **Diseño Síncrono:** La lógica del procesador está sincronizada con una señal de reloj (`clk`).
 
 ### 2\. Conjunto de Instrucciones Soportadas
@@ -58,12 +58,9 @@ El repositorio está organizado de la siguiente manera:
 │   │   └── ALU_Control_Procesador.v    # Lógica de control de la ALU
 │   ├── functional_units/
 │   │   ├── ALU_Procesador.v            # Unidad Aritmético Lógica (ALU)
-│   │   ├── ADD.v, AND.v                # Módulos aritméticos/lógicos auxiliares
 │   │   ├── PC_Procesador.v             # Registro de Contador de Programa (PC)
-│   │   ├── Shift_Left_2_Procesador.v   # Lógica de salto y ramificación
 │   │   ├── Sign-Extend_Procesador.v    # Extensión de Signo
-│   │   ├── MUX_Procesador.v            # Multiplexor de 32 bits
-│   │   └── MUX_5bit_Procesador.v       # Multiplexor de 5 bits (destino de registro)
+│   │   └── Shift_Left_2_Procesador.v   # Lógica auxiliar
 │   ├── memories_registers/
 │   │   ├── BR_Procesador.v             # Banco de Registros (Register File)
 │   │   ├── MemInstrucciones_Procesador.v # Memoria de Instrucciones
@@ -75,10 +72,10 @@ El repositorio está organizado de la siguiente manera:
 │       └── MEM_WB_Procesador.v         # Buffer de etapa Memory/Write Back
 ├── decoder/                            # Herramienta de traducción Ensamblador-Binario
 │   └── GUI_Decodificador.py            # Interfaz gráfica en Python
-├── test_files/                         # Archivos de prueba para la simulación
+├── test_files/                         # Archivos de prueba y datos precargados
 │   ├── Ensamblador_Test.asm            # Código fuente en ensamblador MIPS de prueba
-│   ├── instrucciones.txt               # Contenido binario Big Endian para Memoria de Instrucciones
-│   └── datos.txt                       # Contenido inicial de la Memoria de Datos
+│   ├── instrucciones.txt               # Contenido binario Big Endian (Generado por Python)
+│   └── datos.txt                       # Contenido inicial de la Memoria de Datos (Manual)
 └── PROCESADOR_TB.v                     # Testbench principal para simulación en Verilog
 ```
 
@@ -94,26 +91,23 @@ El repositorio está organizado de la siguiente manera:
     python decoder/GUI_Decodificador.py
     ```
 
-2.  Utiliza la GUI para cargar un archivo `.asm` (como `test_files/Ensamblador_Test.asm`) o ingresa el código ensamblador directamente.
+2.  Utiliza la GUI para cargar tu archivo `.asm` o ingresa el código ensamblador.
 
-3.  Presiona **"Convertir"** y luego **"Guardar Resultado"** para generar el archivo **`instrucciones.txt`**.
+3.  Genera el archivo **`instrucciones.txt`**.
 
-4.  **Asegúrate de tener un archivo `datos.txt`** con el formato binario de 32 bits para la precarga de la Memoria de Datos (esto depende del algoritmo de prueba).
+4.  **Verifica y ajusta el archivo `datos.txt`** con los valores iniciales de la memoria requeridos por tu programa de prueba.
 
-      * **IMPORTANTE:** Los archivos `instrucciones.txt` y `datos.txt` deben estar en el mismo directorio que el Testbench o en la ruta especificada por los módulos de memoria Verilog.
+      * **Configuración:** Asegúrate de que los archivos `instrucciones.txt` y `datos.txt` estén accesibles para los módulos de memoria en Verilog (usualmente en el mismo directorio que el Testbench).
 
-### 2. Simulación en ModelSim
+### 2\. Simulación en ModelSim
+
 El proyecto está optimizado para la simulación con **ModelSim (Mentor Graphics/Siemens EDA)**.
 
-**Creación del Proyecto:** Crea un nuevo proyecto en ModelSim e importa todos los archivos Verilog (.v).
-
-**Compilación:** Compila todos los módulos.
-
-**Simulación:** Inicia la simulación haciendo referencia al módulo procesador_tb.
-
-**Visualización de Señales:** Una vez iniciada la simulación, añade las señales clave (PC, registros del Banco de Registros, datos de entrada/salida de los buffers del pipeline) a la ventana **Wave (Waveform Viewer)** para el análisis.
-
-**Análisis:** Ejecuta la simulación por pasos (run -all o run X ns) y utiliza el waveform para verificar la propagación de instrucciones a través de las 5 etapas del pipeline.
+1.  **Creación del Proyecto:** Crea un nuevo proyecto en ModelSim e importa todos los archivos Verilog (`.v`).
+2.  **Compilación:** Compila todos los módulos.
+3.  **Simulación:** Inicia la simulación haciendo referencia al módulo **`procesador_tb`**.
+4.  **Visualización de Señales:** Una vez iniciada la simulación, añade las señales clave (PC, registros del Banco de Registros, datos de entrada/salida de los *buffers* del pipeline) a la ventana **Wave** (Waveform Viewer) para el análisis.
+5.  **Análisis:** Ejecuta la simulación por pasos (`run -all` o `run X ns`) y utiliza el *waveform* para verificar la propagación de instrucciones a través de las 5 etapas del pipeline.
 
 -----
 
@@ -123,9 +117,9 @@ Este proyecto fue desarrollado por el siguiente equipo de estudiantes de Ingenie
 
 | Nombre del Integrante | Rol Principal |
 | :--- | :--- |
-| **Edgar Andrés Basulto Silva** | Desarrollo y Módulos Verilog |
-| **Juan José Bugarin Salvatierra** | Lógica de Control y Testbench |
-| **María Fernanda Lavadores Morgado** | Decodificador Python y Pruebas |
+| **Edgar Andrés Basulto Silva** | **Desarrollo de Módulos Verilog**, Corrección de errores finales y Testeo del **TB del Datapath** completo. |
+| **Juan José Bugarin Salvatierra** | Desarrollo completo de la **GUI Decodificadora en Python** y elaboración de la **Documentación** (Reporte y README). |
+| **María Fernanda Lavadores Morgado** | Desarrollo y Simulación de los **Testbench Modulares**, y Creación de los **Programas en Ensamblador** para pruebas finales. |
 
 -----
 
