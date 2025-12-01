@@ -58,9 +58,12 @@ El repositorio está organizado de la siguiente manera:
 │   │   └── ALU_Control_Procesador.v    # Lógica de control de la ALU
 │   ├── functional_units/
 │   │   ├── ALU_Procesador.v            # Unidad Aritmético Lógica (ALU)
+│   │   ├── ADD.v, AND.v                # Módulos aritméticos/lógicos auxiliares
 │   │   ├── PC_Procesador.v             # Registro de Contador de Programa (PC)
+│   │   ├── Shift_Left_2_Procesador.v   # Lógica de salto y ramificación
 │   │   ├── Sign-Extend_Procesador.v    # Extensión de Signo
-│   │   └── Shift_Left_2_Procesador.v   # Lógica auxiliar
+│   │   ├── MUX_Procesador.v            # Multiplexor de 32 bits
+│   │   └── MUX_5bit_Procesador.v       # Multiplexor de 5 bits (destino de registro)
 │   ├── memories_registers/
 │   │   ├── BR_Procesador.v             # Banco de Registros (Register File)
 │   │   ├── MemInstrucciones_Procesador.v # Memoria de Instrucciones
